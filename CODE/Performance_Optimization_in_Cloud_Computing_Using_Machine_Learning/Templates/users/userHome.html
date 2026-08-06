@@ -1,0 +1,309 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cloud Performance Optimization Dashboard</title>
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- Three.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  
+  <!-- Internal CSS -->
+  <style>
+      body {    
+          margin: 0;
+          font-family: 'Roboto', sans-serif;
+          background-color: #000;
+          color: #00ff00;
+          overflow-x: hidden;
+      }
+
+      /* Navbar */
+      .navbar {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          background: #1a1a1a;
+          color: #00ff00;
+          padding: 0.8rem 1.5rem;
+          box-shadow: 0 4px 10px rgba(0, 255, 0, 0.3);
+          z-index: 1000;
+      }
+      .nav-container {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          max-width: 1200px;
+          margin: 0 auto;
+      }
+      .nav-logo {
+          font-size: 2.2rem;
+          font-weight: bold;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          color: #00ff00;
+          text-decoration: none;
+      }
+      .nav-menu {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+      }
+      .nav-btn {
+          color: #00ff00;
+          text-decoration: none;
+          padding: 8px 14px;
+          border-radius: 20px;
+          transition: background 0.3s;
+      }
+      .nav-btn:hover {
+          background: #000;
+          color: #00ff00;
+      }
+      .menu-toggle {
+          display: none;
+          cursor: pointer;
+          font-size: 1.4rem;
+      }
+
+      /* Hero Section */
+      .hero-section {
+          height: 100vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          position: relative;
+          text-align: center;
+          color: #00ff00;
+          background: #000;
+          overflow: hidden;
+      }
+      #energyCanvas {
+          position: absolute;
+          top: 0; left: 0;
+          width: 100%;
+          height: 100%;
+          z-index: 0;
+      }
+      .hero-content {
+          position: relative;
+          z-index: 1;
+          max-width: 800px;
+          padding: 2rem;
+          animation: fadeInUp 1.5s ease;
+      }
+      .hero-content h1 {
+          font-size: 3rem;
+          margin-bottom: 1rem;
+      }
+      .hero-content p {
+          font-size: 1.2rem;
+          line-height: 1.6;
+      }
+      @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(40px); }
+          to { opacity: 1; transform: translateY(0); }
+      }
+
+      /* Section Cards */
+      .main-content {
+          max-width: 1000px;
+          margin: 3rem auto;
+          padding: 0 1rem;
+      }
+      .section-card {
+          background: #111;
+          border-radius: 12px;
+          padding: 2rem;
+          margin-bottom: 2rem;
+          box-shadow: 0 6px 15px rgba(0, 255, 0, 0.3);
+          transition: transform 0.3s ease;
+      }
+      .section-card:hover {
+          transform: translateY(-5px);
+      }
+      .section-card h2 {
+          margin-bottom: 1rem;
+          font-size: 1.6rem;
+          color: #00ff00;
+      }
+      .section-card ul {
+          margin: 0;
+          padding-left: 1.2rem;
+      }
+      .section-card li {
+          margin-bottom: 0.5rem;
+          line-height: 1.5;
+      }
+
+      /* Footer */
+      .footer-gradient {
+          background: #222;
+          color: #00ff00;
+          padding: 1.5rem 0;
+          text-align: center;
+          margin-top: 3rem;
+      }
+      .footer-container {
+          max-width: 1000px;
+          margin: auto;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 0.8rem;
+      }
+      .footer-links {
+          display: flex;
+          gap: 1.5rem;
+      }
+      .footer-links a {
+          color: #00ff00;
+          text-decoration: none;
+          transition: opacity 0.3s;
+      }
+      .footer-links a:hover {
+          opacity: 0.7;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+          .nav-menu {
+              display: none;
+              flex-direction: column;
+              background: #2c5364;
+              position: absolute;
+              top: 60px;
+              right: 10px;
+              padding: 1rem;
+              border-radius: 10px;
+          }
+          .menu-toggle {
+              display: block;
+          }
+          .nav-menu.active {
+              display: flex;
+          }
+          .hero-content h1 {
+              font-size: 2rem;
+          }
+          .hero-content p {
+              font-size: 1rem;
+          }
+      }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar">
+      <div class="nav-container">
+          <a href="#" class="nav-logo"><i class="fas fa-bolt"></i> Cloud Optimization</a>
+          <div class="menu-toggle" id="mobileMenu">☰</div>
+          <div class="nav-menu" id="navMenu">
+              <a href="userHome" class="nav-btn" style="color:#00ff00"><i class="fas fa-home"></i> Home</a>
+              <a href="training" class="nav-btn" style="color:#00ff00"><i class="fas fa-book"></i> Training</a>
+              <a href="prediction" class="nav-btn" style="color:#00ff00"><i class="fas fa-chart-line"></i> Prediction</a>
+              <a href="log" class="nav-btn" style="color:#00ff00"><i class="fas fa-sign-out-alt"></i> Logout</a>
+              <a href="#about" class="nav-btn" style="color:#00ff00"><i class="fas fa-info-circle"></i> About Us</a>
+          </div>
+      </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section id="home" class="hero-section">
+      <canvas id="energyCanvas"></canvas>
+      <div class="hero-content">
+          <h1>User Dashboard</h1>
+          <p>Access Your Cloud Resources, Explore Optimization Techniques, and Predict Performance</p>
+      </div>
+  </section>
+
+  <!-- Main Content -->
+  <div class="main-content">
+      <section id="user-overview" class="section-card">
+          <h2><i class="fas fa-user"></i> Optimization Overview</h2>
+          <p>
+              Welcome to the Cloud Performance Optimization Dashboard. Here, you can explore how machine learning
+              techniques can be applied to optimize cloud resource allocation, improve efficiency, and reduce costs.
+          </p>
+      </section>
+
+      <!-- Section Cards -->
+      <section id="key-features" class="section-card">
+          <h2><i class="fas fa-star"></i> Key Optimization Areas</h2>
+          <ul>
+              <li><strong>Resource Allocation:</strong> Optimize the allocation of virtual machines and containers.</li>
+              <li><strong>Workload Scheduling:</strong> Improve workload scheduling for maximum throughput.</li>
+              <li><strong>Cost Reduction:</strong> Reduce cloud computing costs through intelligent resource management.</li>
+              <li><strong>Performance Monitoring:</strong> Monitor and analyze cloud performance metrics in real-time.</li>
+          </ul>
+      </section>
+
+      <section id="user-tools" class="section-card">
+          <h2><i class="fas fa-tools"></i> ML-Driven Tools</h2>
+          <ul>
+              <li>AI-powered recommendations for optimal cloud configurations.</li>
+              <li>Predictive scaling to dynamically adjust resources based on demand.</li>
+              <li>Anomaly detection to identify and resolve performance bottlenecks.</li>
+              <li>Automated optimization strategies for various cloud workloads.</li>
+          </ul>
+      </section>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer-gradient">
+      <div class="footer-container">
+          <p>© 2025 Cloud Optimization. All rights reserved.</p>
+          <div class="footer-links">
+              <a href="#about">About Us</a>
+              <a href="#contact">Contact</a>
+              <a href="#privacy">Privacy Policy</a>
+          </div>
+      </div>
+  </footer>
+
+  <!-- JS for mobile menu and Three.js -->
+  <script>
+      const mobileMenu = document.getElementById("mobileMenu");
+      const navMenu = document.getElementById("navMenu");
+      mobileMenu.addEventListener("click", () => {
+          navMenu.classList.toggle("active");
+      });
+
+      // Three.js Energy Animation for Hero Section
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('energyCanvas'), alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+    const geometry = new THREE.SphereGeometry(15, 32, 32);
+    const material = new THREE.MeshBasicMaterial({ color: 0x00FF00, wireframe: true });
+    const sphere = new THREE.Mesh(geometry, material);
+    scene.add(sphere);
+
+    camera.position.z = 30;
+
+      function animate() {
+          requestAnimationFrame(animate);
+          sphere.rotation.x += 0.005;
+          sphere.rotation.y += 0.005;
+      }
+
+      // Resize Handler
+      window.addEventListener('resize', () => {
+          renderer.setSize(window.innerWidth, window.innerHeight);
+          camera.aspect = window.innerWidth / window.innerHeight;
+          camera.updateProjectionMatrix();
+      });
+  </script>
+</body>
+
+</html>
