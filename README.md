@@ -82,8 +82,8 @@ screenshots/
 │
 ├── 01_index.png
 ├── 02_registration.png
-├── 03_admin_dashboard.png
-├── 04_admin_login.png
+├── 03_admin_login.png
+├── 04_admin_dashboard.png
 ├── 05_admin_user_list_management.png
 ├── 06_user_login.png
 ├── 07_training.png
