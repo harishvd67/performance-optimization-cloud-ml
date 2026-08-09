@@ -78,7 +78,16 @@ Result Visualization
 
 ## 🖥️ Screenshots
 
-Screenshots of the application will be added here.
+screenshots/
+│
+├── 01_index.png
+├── 02_registration.png
+├── 03_admin_dashboard.png
+├── 04_admin_login.png
+├── 05_admin_user_list_management.png
+├── 06_user_login.png
+├── 07_training.png
+└── 08_prediction.png
 
 ## 📁 Project Structure
 
@@ -92,6 +101,6 @@ performance-optimization-cloud-ml/
 ├── BASE PAPER/
 │
 ├── CODE/
-│   └── Performance_Optimization_...
+│   └── Performance_Optimization_In_Cloud_Computing_Using_Machine_Learning
 │
 └── Documents/
